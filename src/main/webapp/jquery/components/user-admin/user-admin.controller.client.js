@@ -3,31 +3,48 @@
 
     jQuery(main);
 
+    var tbody;
+    var template;
+
     function main() {
-        var h1 = jQuery('#title');
-        h1.css('color', 'red');
-        h1.html('User Administration!');
+        tbody = $('tbody');
+        template = $('.template');
+        $('#createUser').click(createUser);
 
-        var red = $('.red');
-        var green = $('.green');
-        var blue = $('.blue');
+        var promise = fetch('http://localhost:8080/api/user');
+        promise.then(function (response) {
+            return response.json();
+        }).then(renderUsers)
+    }
 
-        red.css('color', 'white')
-            .css('background-color', 'red')
+    function createUser() {
+        console.log('createUser');
 
-        var tr = $('.template');
+        var username = $('#usernameFld').val();
+        var password = $('#passwordFld').val();
+        var firstName = $('#firstNameFld').val();
+        var lastName = $('#lastNameFld').val();
 
-        var users = [
-            {username: 'bob'},
-            {username: 'charlie'}
-        ];
+        var user = {
+            username: username,
+            password: password,
+            firstName: firstName,
+            lastName: lastName
+        };
 
-        var tbody = $('tbody');
+        fetch('http://localhost:8080/api/user', {
+            method: 'post',
+            body: JSON.stringify(user),
+            headers: {
+                'content-type': 'application/json'
+            }
+        });
+    }
 
+    function renderUsers(users) {
         for(var i=0; i<users.length; i++) {
             var user = users[i];
-            console.log(user);
-            var clone = tr.clone();
+            var clone = template.clone();
             clone.find('.username')
                 .html(user.username);
             tbody.append(clone);
