@@ -42,6 +42,7 @@
     }
 
     function renderUsers(users) {
+        tbody.empty();
         for(var i=0; i<users.length; i++) {
             var user = users[i];
             var clone = template.clone();
@@ -63,7 +64,10 @@
             .parent()
             .parent()
             .attr('id');
-        userService.deleteUser(userId);
+
+        userService
+            .deleteUser(userId)
+            .then(findAllUsers);
     }
 
     function editUser(event) {
