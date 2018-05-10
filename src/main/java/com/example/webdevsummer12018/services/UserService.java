@@ -1,6 +1,7 @@
 package com.example.webdevsummer12018.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,5 +33,14 @@ public class UserService {
 	@GetMapping("/api/user")
 	public List<User> findAllUsers() {
 		return (List<User>) repository.findAll();
+	}
+	
+	@GetMapping("/api/user/{userId}")
+	public User findUserById(@PathVariable("userId") int userId) {
+		Optional<User> data = repository.findById(userId);
+		if(data.isPresent()) {
+			return data.get();
+		}
+		return null;
 	}
 }
