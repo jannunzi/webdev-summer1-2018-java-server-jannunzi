@@ -1,8 +1,8 @@
-package com.example.webdevsummer12018.repositories;
+package webdev.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.example.webdevsummer12018.models.Hello;
+import webdev.models.Hello;
 
 public interface HelloRepository
 	extends CrudRepository<Hello, Integer> {
