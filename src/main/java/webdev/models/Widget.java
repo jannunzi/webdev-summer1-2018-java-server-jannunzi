@@ -4,14 +4,23 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public class Widget {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	private String text;
 	private String widgetType;
+	@ManyToOne
+	@JsonIgnore
+	private Lesson lesson;
 	public String getWidgetType() {
 		return widgetType;
 	}
@@ -29,5 +38,11 @@ public class Widget {
 	}
 	public void setText(String text) {
 		this.text = text;
+	}
+	public Lesson getLesson() {
+		return lesson;
+	}
+	public void setLesson(Lesson lesson) {
+		this.lesson = lesson;
 	}
 }

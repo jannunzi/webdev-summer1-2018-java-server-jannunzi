@@ -12,39 +12,32 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import webdev.models.Lesson;
+import webdev.models.Module;
 import webdev.models.Widget;
 import webdev.repositories.LessonRepository;
+import webdev.repositories.ModuleRepository;
 import webdev.repositories.WidgetRepository;
 
 @RestController
 @CrossOrigin(origins = "*")
-public class WidgetService {
-	@Autowired
-	WidgetRepository repository;
+public class LessonService {
 	@Autowired
 	LessonRepository lessonRepository;
+	@Autowired
+	ModuleRepository moduleRepository;
 	
-	@GetMapping("/api/lesson/{lessonId}/widget")
-	public List<Widget> findAllWidgetsForLesson(@PathVariable("lessonId") int lessonId) {
-		Optional<Lesson> optionalLesson = lessonRepository.findById(lessonId);
-		if(optionalLesson.isPresent()) {
-			Lesson lesson = optionalLesson.get();
-			return lesson.getWidgets();
+	@GetMapping("/api/lesson")
+	public List<Lesson> findAllLessons() {
+		return (List<Lesson>) lessonRepository.findAll();
+	}
+	
+	@GetMapping("/api/course/{cid}/module/{mid}/lesson")
+	public List<Lesson> findForModule(@PathVariable(name="mid") int moduleId) {
+		Optional<Module> optionalModule = moduleRepository.findById(moduleId);
+		if(optionalModule.isPresent()) {
+			Module module = optionalModule.get();
+			return (List<Lesson>) module.getLessons();
 		}
 		return null;
-	}
-	
-	@PostMapping("/api/widget/save")
-	public void saveAllWidgets(@RequestBody
-			List<Widget> widgets) {
-		repository.deleteAll();
-		for(Widget widget: widgets) {
-			repository.save(widget);
-		}
-	}
-	
-	@GetMapping("/api/widget")
-	public List<Widget> findAllWidgets() {
-		return (List<Widget>) repository.findAll();
 	}
 }
